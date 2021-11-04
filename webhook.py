@@ -21,6 +21,7 @@ async def on_shutdown(dp: Dispatcher):
 
 
 if __name__ == "__main__":
+    log.warning("Initializing..")
     start_webhook(
         dispatcher=dispatcher,
         webhook_path=config.WEBHOOK_PATH,

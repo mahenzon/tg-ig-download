@@ -12,5 +12,5 @@ RUN poetry install
 COPY . .
 
 RUN chmod +x entrypoint.sh
-ENTRYPOINT . ./entrypoint.sh
+ENTRYPOINT ./entrypoint.sh
 CMD python webhook.py
