@@ -29,6 +29,11 @@ https://www.instagram.com/p/CVyIalylalz/""",
             ],
             id="regex-matches-shortcode",
         ),
+        pytest.param(
+            "https://www.instagram.com/p/CTmwHRCKKOT/",
+            ["CTmwHRCKKOT"],
+            id="one-link-only",
+        ),
     ],
 )
 def test_matches_shortcodes(text, codes):

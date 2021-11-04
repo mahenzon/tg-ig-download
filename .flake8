@@ -1,0 +1,5 @@
+[flake8]
+max-line-length = 119
+;min_python_version: 3.9.6
+; flake8 doesn't know about versions above
+min_python_version: 3.9.0

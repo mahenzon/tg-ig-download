@@ -1,14 +1,26 @@
+import asyncio
 import logging
-import pathlib
 
-import instaloader
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from aiogram.types import ContentTypes
 
 import config
+from filtering import (
+    instagram_post_link_shortcode_filter,
+    instagram_post_link_shortcode_re,
+)
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format=config.LOGGING_FORMAT)
+from pics_loading import load_and_send_post_safe
+
+logging.basicConfig(
+    level=logging.INFO,
+    format=config.LOGGING_FORMAT,
+)
+
+log = logging.getLogger(__name__)
+
 
 # Initialize bot and dispatcher
 bot = Bot(token=config.BOT_TOKEN)
@@ -18,25 +30,18 @@ if config.DEBUG:
     dp.setup_middleware(LoggingMiddleware())
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    # old style:
-    # await bot.send_message(message.chat.id, message.text)
+@dp.message_handler(
+    instagram_post_link_shortcode_filter,
+    content_types=ContentTypes.TEXT | ContentTypes.PHOTO | ContentTypes.VIDEO,
+    # run_task=True,
+)
+async def respond_with_downloaded_images(message: types.Message):
+    text = message.text or message.caption or ""
+    shortcodes: list[str] = instagram_post_link_shortcode_re.findall(text)
+    log.info("shortcodes %s from text %r", shortcodes, text)
 
-    await message.answer(message.text)
-
-
-def main():
-    # Get instance
-    loader = instaloader.Instaloader()
-
-    # URL = "https://www.instagram.com/p/CVw7-n6MV5A/?utm_medium=copy_link"
-    post_shortcode = "CVw7-n6MV5A"
-
-    post = instaloader.Post.from_shortcode(loader.context, post_shortcode)
-    target = pathlib.Path("./pic").resolve()
-    loader.download_post(post=post, target=target)
-
-
-if __name__ == "__main__":
-    main()
+    results = await asyncio.gather(
+        types.ChatActions.upload_photo(),
+        *[load_and_send_post_safe(message, shortcode) for shortcode in shortcodes],
+    )
+    log.warning("Results: %s", results)
