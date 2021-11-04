@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  instabot:
+    image: mahenzon/tg-ig-download:latest
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    environment:
+      - DEBUG=1
+      - TG_BOT_TOKEN=123:qwe
+      - WEBHOOK_HOST=https://yourdomain
+      - WEBHOOK_PATH=/path/to/api
+      - WEBAPP_HOST=0.0.0.0
+      - WEBAPP_PORT=3000
+#      - WEBHOOK_URL=
+    ports:
+      - "3000:3000"
+
+volumes:
+  nginx_secrets:
