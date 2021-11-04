@@ -30,10 +30,21 @@ if config.DEBUG:
     dp.setup_middleware(LoggingMiddleware())
 
 
+def only_allowed_users(message: types.Message) -> bool:
+    if not config.ALLOW_IDS:
+        # if not configured, allow for all
+        # log.info("no id limits")
+        return True
+
+    # log.info("check user %s in %s for message %s", message.from_user.id, config.ALLOW_IDS, message)
+    return message.from_user.id in config.ALLOW_IDS
+
+
 @dp.message_handler(
+    only_allowed_users,
     instagram_post_link_shortcode_filter,
     content_types=ContentTypes.TEXT | ContentTypes.PHOTO | ContentTypes.VIDEO,
-    # run_task=True,
+    run_task=True,
 )
 async def respond_with_downloaded_images(message: types.Message):
     text = message.text or message.caption or ""

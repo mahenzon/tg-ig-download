@@ -34,6 +34,11 @@ https://www.instagram.com/p/CVyIalylalz/""",
             ["CTmwHRCKKOT"],
             id="one-link-only",
         ),
+        pytest.param(
+            "https://www.instagram.com/p/CVLF2X7KLwN/?utm_medium=copy_link",
+            ["CVLF2X7KLwN"],
+            id="one-link-only-2",
+        ),
     ],
 )
 def test_matches_shortcodes(text, codes):
