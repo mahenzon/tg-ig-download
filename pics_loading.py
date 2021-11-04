@@ -5,6 +5,7 @@ from typing import Awaitable, Coroutine
 
 import instaloader
 from aiogram import types
+from instaloader import LoginRequiredException
 
 from utils import wrap_sync
 
@@ -88,5 +89,7 @@ async def load_and_send_post_safe(message: types.Message, shortcode: str):
     log.info("start loading posts for shortcode %s", shortcode)
     try:
         return await load_and_send_post(message, shortcode)
+    except LoginRequiredException:
+        await message.reply("can't help, IG requires login :(")
     except Exception:
         log.exception("Error loading post! %s", shortcode)

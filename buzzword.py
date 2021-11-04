@@ -33,7 +33,7 @@ if config.DEBUG:
 @dp.message_handler(
     instagram_post_link_shortcode_filter,
     content_types=ContentTypes.TEXT | ContentTypes.PHOTO | ContentTypes.VIDEO,
-    # run_task=True,
+    run_task=True,
 )
 async def respond_with_downloaded_images(message: types.Message):
     text = message.text or message.caption or ""
@@ -45,3 +45,8 @@ async def respond_with_downloaded_images(message: types.Message):
         *[load_and_send_post_safe(message, shortcode) for shortcode in shortcodes],
     )
     log.warning("Results: %s", results)
+
+
+@dp.message_handler(commands="ping")
+async def ping_pong(message: types.Message):
+    await message.reply("pong!")
