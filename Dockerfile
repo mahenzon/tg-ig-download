@@ -6,9 +6,11 @@ RUN pip install -U pip poetry
 RUN poetry config virtualenvs.create false
 
 COPY pyproject.toml poetry.lock ./
+# TODO: --no-dev ?
 RUN poetry install
 
 COPY . .
 
-ENTRYPOINT entrypoint.sh
+RUN chmod +x entrypoint.sh
+ENTRYPOINT . ./entrypoint.sh
 CMD python webhook.py
