@@ -49,4 +49,5 @@ async def respond_with_downloaded_images(message: types.Message):
 
 @dp.message_handler(commands="ping")
 async def ping_pong(message: types.Message):
+    log.info("send pong")
     await message.reply("pong!")
