@@ -28,6 +28,9 @@ poetry env info
 pre-commit install
 ```
 
+___
+> meh. no .env files rn
+
 5. Copy env config:
 ```shell
 # if running in docker (TODO)
