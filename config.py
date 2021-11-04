@@ -4,7 +4,7 @@ DEBUG = bool(getenv("DEBUG", False))
 
 BOT_TOKEN = getenv("TG_BOT_TOKEN")  # get from BotFather
 
-WEBHOOK_HOST = getenv("WEBHOOK_PATH")  # "https://your.domain"
+WEBHOOK_HOST = getenv("WEBHOOK_HOST")  # "https://your.domain"
 WEBHOOK_PATH = getenv("WEBHOOK_PATH")  # "/path/to/api"
 
 WEBAPP_HOST = getenv("WEBAPP_HOST", "0.0.0.0")  # localhost or ip
